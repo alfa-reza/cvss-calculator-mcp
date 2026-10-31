@@ -16,6 +16,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 V3 = 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
 V4 = 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N'
+CASES = [
+    ('2.0', 'AV:N/AC:L/Au:N/C:C/I:C/A:C', 10.0, 'High'),
+    ('3.0', 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', 9.8, 'Critical'),
+    ('3.1', V3, 9.8, 'Critical'),
+    ('3.1', 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N', 0.0, 'None'),
+    ('4.0', V4, 8.7, 'High'),
+]
 
 
 def request(method, params=None, ident=1):
@@ -33,11 +40,11 @@ def check_tools(test, response):
     test.assertFalse(schema['additionalProperties'])
 
 
-def check_score(test, response, expected):
+def check_score(test, response, expected, version, vector, severity):
     result = response['result']
     test.assertFalse(result.get('isError', False))
-    test.assertNotIn('structuredContent', result)
-    test.assertEqual(result['content'], [{'type': 'text', 'text': expected}])
+    expected_result = {'version': version, 'vector': vector, 'score': expected, 'severity': severity}
+    test.assertEqual(json.loads(result['content'][0]['text']), expected_result)
 
 
 class ResponseReader:
@@ -129,8 +136,8 @@ class IntegrationTests(unittest.TestCase):
                     proc.stdin.write(json.dumps({'jsonrpc': '2.0', 'method': 'notifications/initialized'}) + '\n')
                     proc.stdin.flush()
                     check_tools(self, call(request('tools/list')))
-                    for version, vector, expected in [('3.1', V3, '9.8'), ('4.0', V4, '8.7')]:
-                        check_score(self, call(request('tools/call', {'name': 'calculate_cvss', 'arguments': {'version': version, 'vector': vector}})), expected)
+                    for version, vector, expected, severity in CASES:
+                        check_score(self, call(request('tools/call', {'name': 'calculate_cvss', 'arguments': {'version': version, 'vector': vector}})), expected, version, vector, severity)
                 finally:
                     proc.stdin.close()
                     try:
@@ -176,10 +183,10 @@ class IntegrationTests(unittest.TestCase):
             status, body = post(request('tools/list'))
             self.assertEqual(status, 200)
             check_tools(self, json.loads(body))
-            for version, vector, expected in [('3.1', V3, '9.8'), ('4.0', V4, '8.7')]:
+            for version, vector, expected, severity in CASES:
                 status, body = post(request('tools/call', {'name': 'calculate_cvss', 'arguments': {'version': version, 'vector': vector}}))
                 self.assertEqual(status, 200)
-                check_score(self, json.loads(body), expected)
+                check_score(self, json.loads(body), expected, version, vector, severity)
             for args in [{'version': '3.1', 'vector': 'bad'}, {'version': '3.1', 'vector': 'bad', 'extra': True}, {'version': None, 'vector': 'bad'}, {'vector': 'bad'}, {'version': 3.1, 'vector': 'bad'}]:
                 status, body = post(request('tools/call', {'name': 'calculate_cvss', 'arguments': args}))
                 self.assertTrue(status >= 400 or 'error' in json.loads(body) or json.loads(body).get('result', {}).get('isError'))
@@ -190,7 +197,7 @@ class IntegrationTests(unittest.TestCase):
             with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
                 for status, body in pool.map(parallel_call, range(12)):
                     self.assertEqual(status, 200)
-                    check_score(self, json.loads(body), '9.8')
+                    check_score(self, json.loads(body), 9.8, '3.1', V3, 'Critical')
         finally:
             if proc.poll() is None:
                 proc.send_signal(signal.SIGINT)

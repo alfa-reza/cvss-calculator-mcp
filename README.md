@@ -8,8 +8,15 @@ Environmental, or Supplemental metrics.
 
 ## Requirements and installation
 
-Go 1.25 or newer is required to build from source. Download the appropriate
-release archive when available, or build locally:
+To quickly install the latest binary on Linux or macOS:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/alfa-reza/cvss-calculator-mcp/main/install.sh | bash
+```
+
+Alternatively, download prebuilt release archives for Linux, macOS, or Windows from [Releases](https://github.com/alfa-reza/cvss-calculator-mcp/releases).
+
+Go 1.25 or newer is required to build from source:
 
 ```sh
 go install github.com/alfa-reza/cvss-calculator-mcp/cmd/cvss-calculator-mcp@latest

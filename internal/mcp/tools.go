@@ -2,7 +2,8 @@ package mcpserver
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
+
 	"github.com/alfa-reza/cvss-calculator-mcp/internal/calculator"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
@@ -10,6 +11,38 @@ import (
 type calculateInput struct {
 	Version string `json:"version"`
 	Vector  string `json:"vector"`
+}
+
+type calculateOutput struct {
+	Version  string  `json:"version"`
+	Vector   string  `json:"vector"`
+	Score    float64 `json:"score"`
+	Severity string  `json:"severity"`
+}
+
+func severity(version string, score float64) string {
+	if version == "2.0" {
+		if score < 4 {
+			return "Low"
+		}
+		if score < 7 {
+			return "Medium"
+		}
+		return "High"
+	}
+	if score == 0 {
+		return "None"
+	}
+	if score < 4 {
+		return "Low"
+	}
+	if score < 7 {
+		return "Medium"
+	}
+	if score < 9 {
+		return "High"
+	}
+	return "Critical"
 }
 
 func NewServer() *mcp.Server {
@@ -28,7 +61,12 @@ func NewServer() *mcp.Server {
 			if err != nil {
 				return &mcp.CallToolResult{IsError: true, Content: []mcp.Content{&mcp.TextContent{Text: err.Error()}}}, nil, nil
 			}
-			return &mcp.CallToolResult{Content: []mcp.Content{&mcp.TextContent{Text: fmt.Sprintf("%.1f", score)}}}, nil, nil
+			output := calculateOutput{input.Version, input.Vector, score, severity(input.Version, score)}
+			data, err := json.Marshal(output)
+			if err != nil {
+				return nil, nil, err
+			}
+			return &mcp.CallToolResult{Content: []mcp.Content{&mcp.TextContent{Text: string(data)}}}, nil, nil
 		})
 	return server
 }

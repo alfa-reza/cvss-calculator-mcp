@@ -49,13 +49,23 @@ Call `calculate_cvss` with exactly two strings:
 {"version":"3.1","vector":"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"}
 ```
 
-The single text result is `9.8`. Another example:
+The text result is a JSON object:
+
+```json
+{"version":"3.1","vector":"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H","score":9.8,"severity":"Critical"}
+```
+
+Another example:
 
 ```json
 {"version":"4.0","vector":"CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"}
 ```
 
-This returns `8.7`, as documented in the [FIRST CVSS 4.0 FAQ](https://www.first.org/cvss/faq).
+This returns a JSON object containing `version`, the original `vector`, the numeric
+`score` (8.7 for this example), and `severity`. Scores follow the [FIRST CVSS 4.0 FAQ](https://www.first.org/cvss/faq).
+CVSS 3.x and 4.0 use FIRST's qualitative severity scale; CVSS 2.0 uses the
+[NVD severity ratings](https://nvd.nist.gov/vuln-metrics/cvss): Low (0.0–3.9),
+Medium (4.0–6.9), and High (7.0–10.0).
 The version must match the vector header; CVSS 2.0 has no header. Every Base
 metric is mandatory. v2 and v4 require specification order; v3 metrics may
 appear in any order. Invalid, duplicate, missing, non-Base, incorrectly cased,

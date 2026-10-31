@@ -1,0 +1,60 @@
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Check formatting
+        run: test -z "$(gofmt -l .)"
+      - run: go vet ./...
+      - run: go test ./...
+      - run: go test -race ./...
+      - name: Integration tests with race detector
+        run: python3 -m unittest discover -s tests
+        env:
+          CVSS_TEST_RACE: "1"
+      - run: go build -trimpath -o cvss-calculator-mcp ./cmd/cvss-calculator-mcp
+  artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Build archives and checksums
+        shell: bash
+        run: |
+          mkdir -p dist
+          version=1.0.0
+          for os in linux darwin windows; do
+            for arch in amd64 arm64; do
+              name="cvss-calculator-mcp_${version}_${os}_${arch}"
+              mkdir -p "dist/${name}"
+              binary=cvss-calculator-mcp
+              if [ "$os" = windows ]; then binary="$binary.exe"; fi
+              GOOS="$os" GOARCH="$arch" CGO_ENABLED=0 go build -trimpath -o "dist/${name}/${binary}" ./cmd/cvss-calculator-mcp
+              cp README.md LICENSE THIRD_PARTY_LICENSES "dist/${name}/"
+              if [ "$os" = windows ]; then
+                (cd dist && zip -qr "${name}.zip" "$name")
+              else
+                tar -C dist -czf "dist/${name}.tar.gz" "$name"
+              fi
+            done
+          done
+          (cd dist && sha256sum *.tar.gz *.zip > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: |
+            dist/*.tar.gz
+            dist/*.zip
+            dist/SHA256SUMS

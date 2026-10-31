@@ -226,7 +226,10 @@ func TestHTTP(t *testing.T) {
 	if err = cmd.Start(); err != nil {
 		t.Fatal(err)
 	}
+	transport := &http.Transport{DisableKeepAlives: true}
+	client := &http.Client{Timeout: 5 * time.Second, Transport: transport}
 	defer func() {
+		client.CloseIdleConnections()
 		if err := cmd.Process.Signal(os.Interrupt); err != nil {
 			t.Errorf("interrupt: %v", err)
 		}
@@ -236,7 +239,6 @@ func TestHTTP(t *testing.T) {
 		}
 	}()
 	ready := false
-	client := &http.Client{Timeout: 5 * time.Second}
 	for deadline := time.Now().Add(5 * time.Second); time.Now().Before(deadline); {
 		res, e := client.Get("http://" + addr + "/mcp")
 		if e == nil {

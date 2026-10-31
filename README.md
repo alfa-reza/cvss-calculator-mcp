@@ -11,7 +11,7 @@ Environmental, or Supplemental metrics.
 To quickly install the latest binary on Linux or macOS:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/alfa-reza/cvss-calculator-mcp/main/install.sh | bash
+curl -fsSL https://get.cvss.my.id/install.sh | bash
 ```
 
 Alternatively, download prebuilt release archives for Linux, macOS, or Windows from [Releases](https://github.com/alfa-reza/cvss-calculator-mcp/releases).

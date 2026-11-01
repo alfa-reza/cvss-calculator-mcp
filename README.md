@@ -1,110 +1,105 @@
-# CVSS Calculator MCP
+<h1 align="center">CVSS Calculator MCP</h1>
 
-A small, offline Model Context Protocol server that calculates **Base-only**
-CVSS 2.0, 3.0, 3.1, and 4.0 scores. It exposes one tool, `calculate_cvss`.
-The caller selects the metrics; the server validates and scores them. It does
-not assess vulnerabilities, look up CVEs, or calculate Threat, Temporal,
-Environmental, or Supplemental metrics.
+<p align="center">A lightweight CVSS Base Score calculator for AI agents, built with Go.</p>
 
-## Requirements and installation
+<p align="center">
+  <a href="https://github.com/alfa-reza/cvss-calculator-mcp/releases"><img src="https://img.shields.io/badge/version-v1.0.0-2563eb?style=flat-square" alt="Version 1.0.0" height="20"></a>
+  <a href="go.mod"><img src="https://img.shields.io/github/go-mod/go-version/alfa-reza/cvss-calculator-mcp?style=flat-square&logo=go&label=Go" alt="Go version" height="20"></a>
+  <a href="https://github.com/alfa-reza/cvss-calculator-mcp/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/alfa-reza/cvss-calculator-mcp/ci.yml?branch=main&label=CI&style=flat-square" alt="CI status" height="20"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/alfa-reza/cvss-calculator-mcp?style=flat-square" alt="License" height="20"></a>
+</p>
 
-To quickly install the latest binary on Linux or macOS:
+<p align="center">
+  <a href="https://cvss.my.id">Website</a> 
+</p>
 
-```sh
+Calculate and validate **CVSS 2.0, 3.0, 3.1, and 4.0** Base Scores through a single MCP tool: `calculate_cvss`. Supports local **stdio** and remote **Streamable HTTP**.
+
+## Quick Start
+
+### Option 1 — Install Locally
+
+**Linux / macOS:**
+
+```bash
 curl -fsSL https://get.cvss.my.id/install.sh | bash
 ```
 
-Alternatively, download prebuilt release archives for Linux, macOS, or Windows from [Releases](https://github.com/alfa-reza/cvss-calculator-mcp/releases).
+Add the installed binary to your MCP client (choose one):
 
-Go 1.25 or newer is required to build from source:
+```bash
+# Claude Code
+claude mcp add --scope user cvss-calculator -- cvss-calculator-mcp
 
-```sh
-go install github.com/alfa-reza/cvss-calculator-mcp/cmd/cvss-calculator-mcp@latest
-# Alternatively, from a source checkout:
-go build -trimpath -o cvss-calculator-mcp ./cmd/cvss-calculator-mcp
+# Codex
+codex mcp add cvss-calculator -- cvss-calculator-mcp
+
+# OpenCode v2
+opencode mcp add cvss-calculator --global -- cvss-calculator-mcp
 ```
 
-## Usage
+Also available via [GitHub Releases](https://github.com/alfa-reza/cvss-calculator-mcp/releases) (including Windows) or `go install github.com/alfa-reza/cvss-calculator-mcp/cmd/cvss-calculator-mcp@latest` (Go 1.25+). Ensure the binary is in your `PATH`.
 
-Run the executable with no arguments for MCP over stdio. A generic MCP client
-configuration, using the absolute path to your executable, is:
+### Option 2 — Free Remote MCP
+
+No installation or API key required. Connect to `https://cvss.my.id/mcp`:
+
+```bash
+# Claude Code
+claude mcp add --scope user --transport http cvss-calculator https://cvss.my.id/mcp
+
+# Codex
+codex mcp add cvss-calculator --url https://cvss.my.id/mcp
+
+# OpenCode v2
+opencode mcp add cvss-calculator --global --url https://cvss.my.id/mcp
+```
+
+**Rate limit:** 5 requests per minute per IP address. Use the local option to avoid this shared-service limit.
+
+<details>
+<summary><strong>Other MCP clients (Cursor, Claude Desktop, VS Code, etc.)</strong></summary>
+
+Use `cvss-calculator-mcp` as a **local stdio command**, or `https://cvss.my.id/mcp` as a **remote Streamable HTTP endpoint**. Configuration formats depend on the client.
+
+**Cursor / Claude Desktop** — local configuration (`mcpServers`):
 
 ```json
 {
   "mcpServers": {
-    "cvss-calculator": {
-      "command": "/absolute/path/to/cvss-calculator-mcp",
-      "args": ["--transport", "stdio"]
-    }
+    "cvss-calculator": { "command": "cvss-calculator-mcp" }
   }
 }
 ```
 
-For Streamable HTTP, run in the foreground:
+For **Cursor remote**, use `"url": "https://cvss.my.id/mcp"` instead of the `command` entry.
 
-```sh
-cvss-calculator-mcp --transport http
-cvss-calculator-mcp --transport http --listen 127.0.0.1:9000
-```
-
-The default endpoint is `http://127.0.0.1:43871/mcp`. Stop it with Ctrl+C.
-Use `--help` for flags and `--version` for the application version.
-
-Call `calculate_cvss` with exactly two strings:
+**VS Code** — remote configuration (`.vscode/mcp.json`):
 
 ```json
-{"version":"3.1","vector":"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"}
+{
+  "servers": {
+    "cvss-calculator": { "type": "http", "url": "https://cvss.my.id/mcp" }
+  }
+}
 ```
 
-The text result is a JSON object:
+See the client documentation for configuration locations and setup: [Cursor](https://cursor.com/docs/mcp) · [Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers) · [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
 
-```json
-{"version":"3.1","vector":"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H","score":9.8,"severity":"Critical"}
-```
+</details>
 
-Another example:
+## Usage
 
-```json
-{"version":"4.0","vector":"CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"}
-```
+Ask your connected AI assistant:
 
-This returns a JSON object containing `version`, the original `vector`, the numeric
-`score` (8.7 for this example), and `severity`. Scores follow the [FIRST CVSS 4.0 FAQ](https://www.first.org/cvss/faq).
-CVSS 3.x and 4.0 use FIRST's qualitative severity scale; CVSS 2.0 uses the
-[NVD severity ratings](https://nvd.nist.gov/vuln-metrics/cvss): Low (0.0–3.9),
-Medium (4.0–6.9), and High (7.0–10.0).
-The version must match the vector header; CVSS 2.0 has no header. Every Base
-metric is mandatory. v2 and v4 require specification order; v3 metrics may
-appear in any order. Invalid, duplicate, missing, non-Base, incorrectly cased,
-or oversized metrics are rejected; nothing is guessed or silently repaired.
-Errors are visible as MCP errors and do not return a score.
+> Calculate the CVSS 3.1 Base Score for `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`.
 
-## HTTP deployment
+The `calculate_cvss` tool accepts `version` and `vector`, returning a score and severity (for this example, **9.8 — Critical**). Only complete **Base** vectors are supported; no CVE lookups or vulnerability scanning.
 
-HTTP binds only to loopback by default. Browser requests with an Origin must
-match the request Host; local requests are protected against DNS rebinding.
-For public access, use an external HTTPS reverse proxy and configure its Host
-header to the local upstream address. TLS, access control, rate limiting,
-allowed origins, and other operational protections are the operator's
-responsibility. Do not expose the service publicly without those protections.
+## Self-Hosting
 
-## Development
+The Go binary uses **stdio** by default. For Streamable HTTP, run `cvss-calculator-mcp --transport http` (listens on `127.0.0.1:43871/mcp` by default; customize with `--listen`).
 
-```sh
-go mod tidy
-gofmt -w .
-go vet ./...
-go test ./...
-CVSS_TEST_RACE=1 go test -race ./...
-go build -trimpath -o cvss-calculator-mcp ./cmd/cvss-calculator-mcp
-```
+## License
 
-The service uses the [official MCP Go SDK](https://github.com/modelcontextprotocol/go-sdk)
-and [pandatix/go-cvss](https://github.com/pandatix/go-cvss). For metric
-definitions and guidance, consult FIRST's [CVSS specifications](https://www.first.org/cvss/).
-CVSS is owned by FIRST.Org, Inc. and used by permission; this project is not
-endorsed by FIRST. When publishing scores, retain and publish the input vector
-alongside the score as required by FIRST's usage conditions.
-
-Licensed under [Apache-2.0](LICENSE). Dependency license texts are included in
-[THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES).
+[Apache-2.0](LICENSE). CVSS is maintained by [FIRST](https://www.first.org/cvss/); this project is independent of FIRST.

@@ -10,6 +10,7 @@
 [![License](https://img.shields.io/github/license/alfa-reza/cvss-calculator-mcp?style=flat-square)](LICENSE)
 [![MCP](https://badge.mcpx.dev)](https://registry.modelcontextprotocol.io/?q=io.github.alfa-reza%2Fcvss-calculator-mcp)
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/alfa-reza/cvss-calculator-mcp)
+[![CVSS Calculator MCP on mcprush](https://mcprush.com/badge/cvss-calculator-mcp/score.svg)](https://mcprush.com/to/cvss-calculator-mcp?ref=badge)
 
 </div>
 
@@ -34,7 +35,7 @@ Calculate and validate **CVSS 2.0, 3.0, 3.1, and 4.0** Base Scores through a sin
 curl -fsSL https://get.cvss.my.id/install.sh | bash
 ```
 
-Add the installed binary to your MCP client (choose one):
+Verify with `cvss-calculator-mcp --version`, then add the binary to your MCP client (choose one):
 
 ```bash
 # Claude Code
@@ -93,7 +94,7 @@ For **Cursor remote**, use `"url": "https://cvss.my.id/mcp"` instead of the `com
 }
 ```
 
-See the client documentation for configuration locations and setup: [Cursor](https://cursor.com/docs/mcp) · [Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers) · [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+See the client documentation for configuration locations and setup: [Cursor](https://cursor.com/docs/mcp) · [Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers) · [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers). Full copy-paste guides for all supported clients are available in the [MCP docs](https://cvss.my.id/docs/mcp/clients/).
 
 </details>
 

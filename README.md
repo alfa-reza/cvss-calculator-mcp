@@ -9,11 +9,13 @@
 [![CI status](https://img.shields.io/github/actions/workflow/status/alfa-reza/cvss-calculator-mcp/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/alfa-reza/cvss-calculator-mcp/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/alfa-reza/cvss-calculator-mcp?style=flat-square)](LICENSE)
 [![MCP](https://badge.mcpx.dev)](https://registry.modelcontextprotocol.io/?q=io.github.alfa-reza%2Fcvss-calculator-mcp)
+[![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/alfa-reza/cvss-calculator-mcp)
 
 </div>
 
 <p align="center">
   <a href="https://cvss.my.id">Website</a> ·
+  <a href="https://cvss.my.id/docs/mcp/">Docs</a> ·
   <a href="https://registry.modelcontextprotocol.io/?q=io.github.alfa-reza%2Fcvss-calculator-mcp">MCP Registry</a> ·
   <a href="https://lobehub.com/mcp/alfa-reza-cvss-calculator-mcp">LobeHub</a> ·
   <a href="https://glama.ai/mcp/servers/alfa-reza/cvss-calculator-mcp">Glama Server</a> ·

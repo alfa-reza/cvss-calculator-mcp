@@ -11,6 +11,7 @@
 [![MCP](https://badge.mcpx.dev)](https://registry.modelcontextprotocol.io/?q=io.github.alfa-reza%2Fcvss-calculator-mcp)
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/alfa-reza/cvss-calculator-mcp)
 [![CVSS Calculator MCP on mcprush](https://mcprush.com/badge/cvss-calculator-mcp/score.svg)](https://mcprush.com/to/cvss-calculator-mcp?ref=badge)
+[![M8ven Score](https://m8ven.ai/badge/mcp/alfa-reza-cvss-calculator-mcp-1larrv?v=c1f567e28406ccfe42d46af3e1d1b022)](https://m8ven.ai/mcp/alfa-reza-cvss-calculator-mcp-1larrv?s=readme)
 
 </div>
 

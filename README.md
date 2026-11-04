@@ -8,20 +8,22 @@
 [![Go version](https://img.shields.io/github/go-mod/go-version/alfa-reza/cvss-calculator-mcp?style=flat-square&logo=go&label=Go)](go.mod)
 [![CI status](https://img.shields.io/github/actions/workflow/status/alfa-reza/cvss-calculator-mcp/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/alfa-reza/cvss-calculator-mcp/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/alfa-reza/cvss-calculator-mcp?style=flat-square)](LICENSE)
+<br>
 [![MCP](https://badge.mcpx.dev)](https://registry.modelcontextprotocol.io/?q=io.github.alfa-reza%2Fcvss-calculator-mcp)
+[![mcptry score](https://mcptry.com/badge/io.github.alfa-reza/cvss-calculator-mcp)](https://mcptry.com/servers/io.github.alfa-reza/cvss-calculator-mcp)
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/alfa-reza/cvss-calculator-mcp)
 [![CVSS Calculator MCP on mcprush](https://mcprush.com/badge/cvss-calculator-mcp/score.svg)](https://mcprush.com/to/cvss-calculator-mcp?ref=badge)
 [![M8ven Score](https://m8ven.ai/badge/mcp/alfa-reza-cvss-calculator-mcp-1larrv?v=c1f567e28406ccfe42d46af3e1d1b022)](https://m8ven.ai/mcp/alfa-reza-cvss-calculator-mcp-1larrv?s=readme)
+[![LobeHub](https://img.shields.io/badge/LobeHub-MCP-5A67D8?style=flat-square)](https://lobehub.com/mcp/alfa-reza-cvss-calculator-mcp)
+[![Glama](https://glama.ai/mcp/servers/alfa-reza/cvss-calculator-mcp/badges/score.svg)](https://glama.ai/mcp/servers/alfa-reza/cvss-calculator-mcp)
+[![Glama Connector](https://img.shields.io/badge/Glama-Connector-4B5563?style=flat-square)](https://glama.ai/mcp/connectors/id.my.cvss/cvss-calculator-mcp)
 
 </div>
 
 <p align="center">
   <a href="https://cvss.my.id">Website</a> ·
   <a href="https://cvss.my.id/docs/mcp/">Docs</a> ·
-  <a href="https://registry.modelcontextprotocol.io/?q=io.github.alfa-reza%2Fcvss-calculator-mcp">MCP Registry</a> ·
-  <a href="https://lobehub.com/mcp/alfa-reza-cvss-calculator-mcp">LobeHub</a> ·
-  <a href="https://glama.ai/mcp/servers/alfa-reza/cvss-calculator-mcp">Glama Server</a> ·
-  <a href="https://glama.ai/mcp/connectors/id.my.cvss/cvss-calculator-mcp">Glama Connector</a>
+  <a href="https://registry.modelcontextprotocol.io/?q=io.github.alfa-reza%2Fcvss-calculator-mcp">MCP Registry</a>
 </p>
 
 Calculate and validate **CVSS 2.0, 3.0, 3.1, and 4.0** Base Scores through a single MCP tool: `calculate_cvss`. Supports local **stdio** and remote **Streamable HTTP**.

@@ -46,7 +46,7 @@ func severity(version string, score float64) string {
 }
 
 func NewServer() *mcp.Server {
-	server := mcp.NewServer(&mcp.Implementation{Name: "cvss-calculator-mcp", Version: "1.0.0"}, nil)
+	server := mcp.NewServer(&mcp.Implementation{Name: "cvss-calculator-mcp", Version: "1.1.0"}, nil)
 	schema := map[string]any{
 		"type": "object",
 		"properties": map[string]any{

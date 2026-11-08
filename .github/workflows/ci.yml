@@ -24,6 +24,7 @@ jobs:
           CVSS_TEST_RACE: "1"
       - run: go build -trimpath -o cvss-calculator-mcp ./cmd/cvss-calculator-mcp
   artifacts:
+    if: startsWith(github.ref, 'refs/tags/v')
     needs: test
     runs-on: ubuntu-24.04
     permissions:

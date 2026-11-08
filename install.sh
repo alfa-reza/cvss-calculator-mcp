@@ -68,7 +68,7 @@ if [ -z "$VERSION" ]; then
 fi
 
 if [ -z "$VERSION" ]; then
-  VERSION="v1.0.0"
+  VERSION="v1.1.0"
 fi
 
 VERSION_NUM="${VERSION#v}"

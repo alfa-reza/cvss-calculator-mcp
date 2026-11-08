@@ -4,7 +4,7 @@
 
 <div align="center">
 
-[![Version 1.0.0](https://img.shields.io/badge/version-v1.0.0-2563eb?style=flat-square)](https://github.com/alfa-reza/cvss-calculator-mcp/releases)
+[![Version 1.1.0](https://img.shields.io/badge/version-v1.1.0-2563eb?style=flat-square)](https://github.com/alfa-reza/cvss-calculator-mcp/releases)
 [![Go version](https://img.shields.io/github/go-mod/go-version/alfa-reza/cvss-calculator-mcp?style=flat-square&logo=go&label=Go)](go.mod)
 [![CI status](https://img.shields.io/github/actions/workflow/status/alfa-reza/cvss-calculator-mcp/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/alfa-reza/cvss-calculator-mcp/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/alfa-reza/cvss-calculator-mcp?style=flat-square)](LICENSE)
@@ -45,6 +45,14 @@ The agent will ask you to choose and approve a local or remote connection before
 ```bash
 curl -fsSL https://get.cvss.my.id/install.sh | bash
 ```
+
+**Windows (PowerShell, x64 or ARM64):**
+
+```powershell
+irm https://raw.githubusercontent.com/alfa-reza/cvss-calculator-mcp/main/install.ps1 | iex
+```
+
+The installer prints the binary location; add that directory to your PATH or use the full path in your MCP client.
 
 Verify with `cvss-calculator-mcp --version`, then add the binary to your MCP client (choose one):
 

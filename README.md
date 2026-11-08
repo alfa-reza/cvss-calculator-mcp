@@ -109,6 +109,16 @@ Ask your connected AI assistant:
 
 The `calculate_cvss` tool accepts `version` and `vector`, returning a score and severity (for this example, **9.8 — Critical**). Only complete **Base** vectors are supported; no CVE lookups or vulnerability scanning.
 
+### Vulnerability Assessment Skill
+
+Install the optional skill to guide your agent in assessing discovered vulnerabilities, selecting CVSS metrics, and calculating Base Scores with this MCP server:
+
+```bash
+npx skills add alfa-reza/cvss-calculator-mcp --skill vulnerability-cvss-assessment
+```
+
+Choose your agent when prompted. Add `--global` to make the skill available across projects. The skill requires the MCP server configured as described in Quick Start. See its [instructions](skills/vulnerability-cvss-assessment/SKILL.md) and [tool reference](skills/vulnerability-cvss-assessment/references/tool-reference.md).
+
 ## Self-Hosting
 
 The Go binary uses **stdio** by default. For Streamable HTTP, run `cvss-calculator-mcp --transport http` (listens on `127.0.0.1:43871/mcp` by default; customize with `--listen`).

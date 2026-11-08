@@ -30,6 +30,14 @@ Calculate and validate **CVSS 2.0, 3.0, 3.1, and 4.0** Base Scores through a sin
 
 ## Quick Start
 
+For agent-guided setup, copy this prompt to your AI agent:
+
+```text
+Read https://get.cvss.my.id/LLM.txt and follow its instructions to set up CVSS Calculator MCP and offer to install its vulnerability assessment skill.
+```
+
+The agent will ask you to choose and approve a local or remote connection before making changes.
+
 ### Option 1 — Install Locally
 
 **Linux / macOS:**

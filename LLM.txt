@@ -1,0 +1,47 @@
+---
+name: cvss-calculator-mcp-setup
+description: Set up CVSS Calculator MCP in an AI agent after the user chooses and approves a connection.
+---
+
+# Set up CVSS Calculator MCP
+
+## 1. Ask and wait for approval
+
+Before installing anything or changing any configuration, ask the user which option they prefer:
+
+1. **Local MCP (recommended):** runs on the user's machine over stdio. It avoids sending vectors to the shared remote service and its rate limit. Requires a local binary.
+2. **Remote MCP:** connects to `https://cvss.my.id/mcp` over Streamable HTTP. No local binary or API key is needed; vectors are sent to the remote service, which is limited to 5 requests per minute per IP.
+
+Wait for the user's explicit choice and approval before proceeding. Do not install, run an installer, or modify MCP configuration without approval. If the choice or approval is unclear, ask again. Do not switch options without further approval.
+
+## 2. Set up the approved option
+
+Identify the user's MCP client, operating system, and desired configuration scope; ask if unclear. Preserve existing configuration and MCP servers.
+
+For **local**, check whether `cvss-calculator-mcp` is already available. If not, on Linux or macOS install it with:
+
+```sh
+curl -fsSL https://get.cvss.my.id/install.sh | bash
+```
+
+For Windows, use the appropriate binary from [GitHub Releases](https://github.com/alfa-reza/cvss-calculator-mcp/releases). Alternatively, with Go 1.25 or later, use `go install github.com/alfa-reza/cvss-calculator-mcp/cmd/cvss-calculator-mcp@latest`. Ensure the binary is in the client's PATH, verify `cvss-calculator-mcp --version`, and configure it as a local stdio server named `cvss-calculator` with command `cvss-calculator-mcp` and no arguments.
+
+For **remote**, configure a Streamable HTTP MCP server named `cvss-calculator` with URL `https://cvss.my.id/mcp`.
+
+Use the client's current documentation or help to choose its configuration format and location. Client examples are available in the [README](https://github.com/alfa-reza/cvss-calculator-mcp#quick-start) and [MCP client guides](https://cvss.my.id/docs/mcp/clients/). Do not overwrite an existing server of the same name without asking.
+
+## 3. Offer the assessment skill
+
+Ask the user for separate approval to install the optional vulnerability assessment skill, and ask which supported agent and installation scope they prefer if unclear. Explain that this uses `npx` and may download and run packages. Only after approval, install it using:
+
+```sh
+npx skills add alfa-reza/cvss-calculator-mcp --skill vulnerability-cvss-assessment
+```
+
+Select the approved agent and scope when prompted; use `--global` only if the user approves a global installation. If the command needs user interaction that you cannot complete, ask the user to complete it rather than assuming success. If declined, skip the skill and continue.
+
+## 4. Verify and report
+
+If the configured server is loaded, call `calculate_cvss` with `version` `3.1` and `vector` `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`. The expected score is 9.8 (Critical). If the client requires a restart or reload, report verification as pending instead of claiming success.
+
+Report the chosen connection, client and configuration scope, whether the skill was installed, skipped, or is pending, what was changed, verification result, and any next step or blocker. Never claim an installation or test succeeded unless it was actually checked.
